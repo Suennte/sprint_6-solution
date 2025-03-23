@@ -8,6 +8,8 @@ import main.Subtask;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryTaskManagerTest {
@@ -58,4 +60,20 @@ public class InMemoryTaskManagerTest {
         Assertions.assertEquals(originalTask.getDescription(), retrievedTask.getDescription(), "Описание задачи должно остаться неизменным");
         Assertions.assertEquals(originalTask.getStatus(), retrievedTask.getStatus(), "Статус задачи должно остаться неизменным");
     }
+
+    @Test
+    public void testTaskModificationInHistory() {
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        Task task = new Task("Задача 1", "Описание 1");
+        taskManager.createTask(task);
+
+        taskManager.getTaskById(task.getId());
+
+        task.setName("Описание 2");
+        taskManager.updateTask(task);
+        
+        List<Task> history = taskManager.getHistoryManager().getHistory();
+        assertEquals(1, history.size(), "История должна содержать одну задачу");
+    }
+
 }

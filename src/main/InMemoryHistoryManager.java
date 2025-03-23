@@ -1,21 +1,34 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private List<Task> history = new ArrayList<>(); // Список для хранения истории
+    private List<Task> history = new ArrayList<>();
 
     @Override
     public void add(Task task) {
-        history.add(task); // Добавляем задачу в историю
-        if (history.size() > 10) { // Если размер списка превышает 10
-            history.remove(0); // Удаляем самый старый элемент
+        if (task == null) {
+            return;
         }
+        remove(task.getId());
+        history.add(task); //
+        if (history.size() > 10) { //
+            history.remove(0);
+        }
+    }
+
+    public void remove(int id) {
+        history.removeIf(task -> task.getId() == id);
     }
 
     @Override
     public List<Task> getHistory() {
-        return new ArrayList<>(history); // Возвращаем копию списка
+        Set<Task> uniqueList = new LinkedHashSet<>(history);
+        return new ArrayList<>(uniqueList);
+    }
+
+    @Override
+    public boolean contains(Task task) {
+        return history.stream().anyMatch(t -> t.getId() == task.getId());
     }
 }

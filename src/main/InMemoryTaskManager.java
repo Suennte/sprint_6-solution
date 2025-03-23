@@ -65,6 +65,7 @@ public class InMemoryTaskManager implements TaskManager {
         return task;
     }
 
+
     @Override
     public void updateTask(Task task) {
         if (tasks.containsKey(task.getId())) {
@@ -88,6 +89,8 @@ public class InMemoryTaskManager implements TaskManager {
             epic.removeSubtask(subtask);
             updateEpicStatus(epic);
         }
+
+        historyManager.remove(id);
     }
 
     @Override
